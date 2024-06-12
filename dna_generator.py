@@ -58,25 +58,23 @@ def getBasePairCounts(currentGenes):
 
 bases = ["A","C","G","T"]
 
-hairGenes = {"texture": dna.hair_textures,
-             "type":    dna.hair_types,
-             "colour":  dna.hair_colours}
+hairGenes = {"Hair Texture": dna.hair_textures,
+             "Hair Type":    dna.hair_types,
+             "Hair Colour":  dna.hair_colours}
 
-eyeGenes = {"tone":      dna.eye_tones,
-            "primary":   dna.eye_primary_colours,
-            "secondary": dna.eye_secondary_colours}
+eyeGenes = {"Eye Tone":      dna.eye_tones,
+            "Eye Primary Colour":   dna.eye_primary_colours,
+            "Eye Secondary Colour": dna.eye_secondary_colours}
 
-skinGenes = {"type":   dna.skin_types,
-             "tone":   dna.skin_tones,
-             "colour": dna.skin_colours}
+skinGenes = {"Skin Type":   dna.skin_types,
+             "Skin Tone":   dna.skin_tones,
+             "Skin Colour": dna.skin_colours}
 
-allGenes = {"hair": hairGenes,
-            "eye":  eyeGenes,
-            "skin": skinGenes}
+allGenes = {"Hair": hairGenes,
+            "Eyes":  eyeGenes,
+            "Skin": skinGenes}
 
 #print(BuildSequenceFromGenes())
-
-for genes in allGenes:
-    print(getBasePairCounts(allGenes[genes]))
-
-print(getNumberOfEncodedBases())
+#for genes in allGenes:
+    #print(getBasePairCounts(allGenes[genes]))
+#print(getNumberOfEncodedBases())
