@@ -17,7 +17,7 @@ def BuildSequenceFromGenes():
         geneGroupLength = getBasePairCounts(allGenes[geneGroup])
         encoding = geneGroupLength
 
-        for encodedBasePairs in range(2):
+        for encodedBasePairs in range(getNumberOfEncodedBases()):
             for i in range(len(bases)-1,-1,-1):
                 if i <= encoding:
                     dnaSequence = dnaSequence + bases[i]
@@ -28,6 +28,19 @@ def BuildSequenceFromGenes():
            dnaSequence = dnaSequence + bases[random.randint(0, 3)]
 
     return dnaSequence
+
+def getLongestGene():
+    totalBasePairs = 0
+
+    for genes in allGenes:
+        newGeneLength = getBasePairCounts(allGenes[genes])
+        if newGeneLength > totalBasePairs:
+            totalBasePairs = newGeneLength
+
+    return totalBasePairs
+
+def getNumberOfEncodedBases():
+    return (getLongestGene() // (len(bases) - 1)) + 1
 
 def getBasePairCounts(currentGenes):
     totalBasePairs = 0
@@ -61,4 +74,9 @@ allGenes = {"hair": hairGenes,
             "eye":  eyeGenes,
             "skin": skinGenes}
 
-print(BuildSequenceFromGenes())
+#print(BuildSequenceFromGenes())
+
+for genes in allGenes:
+    print(getBasePairCounts(allGenes[genes]))
+
+print(getNumberOfEncodedBases())

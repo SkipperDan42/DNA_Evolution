@@ -4,15 +4,55 @@ import dna_generator as gen
 
 
 def PrintFeatures(dnaSequence):
-    print("Hair: " + dna.hair_textures[dnaSequence[2]] + \
-                        dna.hair_types[dnaSequence[3]] + \
-                        dna.hair_colours[dnaSequence[4:6]])
-    print("Eyes: " + dna.eye_tones[dnaSequence[8]] + \
-                    dna.eye_primary_colours[dnaSequence[9]] + \
-                    dna.eye_secondary_colours[dnaSequence[10]])
-    print("Skin: " + dna.skin_types[dnaSequence[13]] + \
-                    dna.skin_tones[dnaSequence[14]] + \
-                    dna.skin_colours[dnaSequence[15]])
+    encoder = gen.getNumberOfEncodedBases() - 1
+    read = 0
+
+    for 
+    read += encoder
+    toRead = len(list(dna.hair_textures.keys())[0])
+    print("Hair Texture: " +
+          dna.hair_textures[dnaSequence[read : read + toRead]])
+
+    read += toRead
+    toRead = len(list(dna.hair_types.keys())[0])
+    print("Hair Type: " +
+          dna.hair_types[dnaSequence[read : read + toRead]])
+
+    read += toRead
+    toRead = len(list(dna.hair_colours.keys())[0])
+    print("Hair Colour: " + dna.hair_colours[dnaSequence[read : read + toRead]])
+
+    read += toRead + encoder
+    toRead = len(list(dna.eye_tones.keys())[0])
+    print("Eyes Tone: " + dna.eye_tones[dnaSequence[read : read + toRead]])
+
+    read += toRead
+    toRead = len(list(dna.eye_primary_colours.keys())[0])
+    print("Eyes Primary Colour: " +
+          dna.eye_primary_colours[dnaSequence[read : read + toRead]])
+
+    primary = toRead
+    read += toRead
+    toRead = len(list(dna.eye_secondary_colours.keys())[0])
+    if dna.eye_primary_colours[dnaSequence[read - primary : read]] \
+            in dna.eye_secondary_colours[dnaSequence[read : read + toRead]]:
+        print("Eyes Secondary Colour: N/A")
+    else:
+        print("Eyes Secondary Colour: " +
+              dna.eye_secondary_colours[dnaSequence[read : read + toRead]])
+
+    read += toRead + encoder
+    toRead = len(list(dna.skin_types.keys())[0])
+    print("Skin Type: " + dna.skin_types[dnaSequence[read : read + toRead]])
+
+    read += toRead
+    toRead = len(list(dna.skin_tones.keys())[0])
+    tone = dna.skin_tones[dnaSequence[read : read + toRead]]
+    read += toRead
+    toRead = len(list(dna.skin_colours.keys())[0])
+    colour = dna.skin_colours[dnaSequence[read: read + toRead]]
+    print("Skin Tone: " + tone + " " + colour)
+
 
 def RandomMutation(motherDNA, fatherDNA):
 
@@ -38,7 +78,7 @@ def SignalSwitching(motherDNA, fatherDNA):
 
     for geneGroups in range(len(gen.allGenes)):
 
-        geneLength = 2 + \
+        geneLength = gen.getNumberOfEncodedBases() + \
                      gen.bases.index(motherDNA[baseCount]) + \
                      gen.bases.index(motherDNA[baseCount + 1])
 
