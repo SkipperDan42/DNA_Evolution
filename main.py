@@ -59,19 +59,10 @@ def SignalSwitching(motherDNA, fatherDNA):
         for base in range(gen.getNumberOfEncodedBases()):
             geneLength += gen.bases.index(motherDNA[baseCount + base]) + 1
 
-        motherGene = ""
-        fatherGene = ""
-
-        for basePairs in range(baseCount,
-                               geneLength + baseCount,
-                               1):
-            motherGene = motherGene + motherDNA[basePairs]
-            fatherGene = fatherGene + fatherDNA[basePairs]
-
-        if random.randint(0,2) == 0:
-            childGene = motherGene
+        if random.randint(0,10) >= 5:
+            childGene = motherDNA[baseCount : baseCount + geneLength]
         else:
-            childGene = fatherGene
+            childGene = fatherDNA[baseCount : baseCount + geneLength]
 
         childDNA = childDNA + childGene
 
