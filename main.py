@@ -1,14 +1,6 @@
 import random
 import dna_dictionaries
 
-def BuildRandomSequence():
-    bases = ["A","C","G","T"]
-    dnaSequence = ""
-
-    for i in range(12):
-        dnaSequence = dnaSequence + bases[random.randint(0,3)]
-
-    return dnaSequence
 
 def PrintFeatures(dnaSequence):
     print("Hair Colour: " + dna_dictionaries.hair_colours[dnaSequence[0:3]])
