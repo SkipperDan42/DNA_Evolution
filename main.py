@@ -1,12 +1,18 @@
 import random
-import dna_dictionaries
+import dna_dictionaries as dna
+import dna_generator as gen
 
 
 def PrintFeatures(dnaSequence):
-    print("Hair Colour: " + dna_dictionaries.hair_colours[dnaSequence[0:3]])
-    print("Hair Type: " + dna_dictionaries.hair_types[dnaSequence[3:6]])
-    print("Eye Colour: " + dna_dictionaries.eye_colours[dnaSequence[6:9]])
-    print("Skin Colour: " + dna_dictionaries.skin_colours[dnaSequence[9:12]])
+    print("Hair: " + dna.hair_textures[dnaSequence[2]] + \
+                        dna.hair_types[dnaSequence[3]] + \
+                        dna.hair_colours[dnaSequence[4:6]])
+    print("Eyes: " + dna.eye_tones[dnaSequence[8]] + \
+                    dna.eye_primary_colours[dnaSequence[9]] + \
+                    dna.eye_secondary_colours[dnaSequence[10]])
+    print("Skin: " + dna.skin_types[dnaSequence[13]] + \
+                    dna.skin_tones[dnaSequence[14]] + \
+                    dna.skin_colours[dnaSequence[15]])
 
 def RandomMutation(motherDNA, fatherDNA):
 
@@ -28,10 +34,21 @@ def RandomMutation(motherDNA, fatherDNA):
 def SignalSwitching(motherDNA, fatherDNA):
 
     childDNA = ""
+    baseCount = 0
 
-    for i in range(0,len(motherDNA),3):
-        motherGene = motherDNA[i] + motherDNA[i + 1] + motherDNA[i + 2]
-        fatherGene = fatherDNA[i] + fatherDNA[i + 1] + motherDNA[i + 2]
+    for geneGroups in range(len(gen.allGenes)):
+
+        geneLength = 2 + \
+                     gen.bases.index(motherDNA[baseCount]) + \
+                     gen.bases.index(motherDNA[baseCount + 1])
+
+        motherGene = ""
+        fatherGene = ""
+        for basePairs in range(baseCount,
+                               geneLength + baseCount,
+                               1):
+            motherGene = motherGene + motherDNA[basePairs]
+            fatherGene = fatherGene + fatherDNA[basePairs]
 
         if random.randint(0,2) == 0:
             childGene = motherGene
@@ -40,10 +57,12 @@ def SignalSwitching(motherDNA, fatherDNA):
 
         childDNA = childDNA + childGene
 
+        baseCount += geneLength
+
     return childDNA
 
-motherDNA = BuildRandomSequence()
-fatherDNA = BuildRandomSequence()
+motherDNA = gen.BuildSequenceFromGenes()
+fatherDNA = gen.BuildSequenceFromGenes()
 
 childDNASignal = SignalSwitching(motherDNA, fatherDNA)
 childDNAMutation = RandomMutation(motherDNA, fatherDNA)
