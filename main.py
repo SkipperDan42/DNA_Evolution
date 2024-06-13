@@ -3,19 +3,27 @@ import dna_generator as gen
 
 
 
-def PrintFeatures(dnaSequence):
+def PrintFeatures(chromosomeA, chromosomeB):
 
-    encoder = gen.getNumberOfEncodedBases() - 1
+    encoder = gen.getNumberOfEncodedBases()
     read = 0
 
     for geneGroupLabel in gen.genesUsed:
         geneGroup = gen.genesUsed[geneGroupLabel]
+
+        #Choose which Chromosome to read
+        chromosomeToRead = ""
+        if chromosomeA[read] == "A" or chromosomeA[read] == "T":
+            chromosomeToRead = chromosomeA
+        else:
+            chromosomeToRead = chromosomeB
+
         read += encoder
 
         for i, gene in enumerate(geneGroup):
             toRead = len(list(geneGroup[gene].keys())[0])
             print(gene + ": " +
-                  geneGroup[gene][dnaSequence[read : read + toRead]])
+                  geneGroup[gene][chromosomeToRead[read : read + toRead]])
 
             read = toRead
 
@@ -122,21 +130,21 @@ def runDNASimulator(numberOfGenes):
 
     #print("Child Chromosome A [SS]:" + childChASignal)
     #print("Child Chromosome B [SS]:" + childChBSignal)
-    print("Child Chromosome A [M]:" + childChAMutation)
-    print("Child Chromosome B [M]:" + childChBMutation)
-    """
+    print("Child Chromosome A [M] :" + childChAMutation)
+    print("Child Chromosome B [M] :" + childChBMutation)
+
     print("\nMother:")
     PrintFeatures(motherChromosomeA, motherChromosomeB)
 
     print("\nFather:")
     PrintFeatures(fatherChromosomeA, fatherChromosomeB)
 
-    print("\nChild [Signal Switching]:")
+    #print("\nChild [Signal Switching]:")
     #PrintFeatures(childChASignal, childChBSignal)
 
     print("\nChild [Random Mutation]:")
     PrintFeatures(childChAMutation, childChBMutation)
-    """
+
 
 
 #Either "all" or numeric value
