@@ -17,20 +17,16 @@ def BuildSequenceFromGenes(numberOfGenes):
     global genesUsed
     global genesChosen
 
-    if numberOfGenes == "all":
-        genesUsed = gene.allGenes
-    elif numberOfGenes.strip().isdigit():
-        if int(numberOfGenes) > len(gene.allGenes):
-            if not genesChosen:
-                genesChosen = True
-                for randomNumber in range(random.randint(1, len(gene.allGenes))):
-                    randomGene = random.choice(list(gene.allGenes.keys()))
-                    genesUsed.update({randomGene: gene.allGenes[randomGene]})
-        else:
-
-            for number in range(int(numberOfGenes) + 1):
-                randomGene = random.choice(list(gene.allGenes.keys()))
-                genesUsed.update({randomGene: gene.allGenes[randomGene]})
+    if not genesChosen:
+        genesChosen = True
+        if numberOfGenes == "all":
+            genesUsed = gene.allGenes
+        elif numberOfGenes.strip().isdigit():
+            numberOfGenes = int(numberOfGenes)
+            if numberOfGenes > len(gene.allGenes):
+                genesUsed = getRandomGenes(random.randint(1, len(gene.allGenes)))
+            else:
+                genesUsed = getRandomGenes(numberOfGenes)
 
 
     for geneGroup in genesUsed:
@@ -51,9 +47,9 @@ def BuildSequenceFromGenes(numberOfGenes):
 
 
 
-def getRandomGenes(range):
+def getRandomGenes(numberOfGenes):
     randomGenes = {}
-    for number in range(range):
+    for number in range(numberOfGenes):
         geneLabel = random.choice(list(gene.allGenes.keys()))
         randomGenes.update({geneLabel: gene.allGenes[geneLabel]})
 

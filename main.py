@@ -71,7 +71,7 @@ def SignalSwitching(motherDNA, fatherDNA):
     return childDNA
 
 #Either "all" or numeric value
-numberOfGenes = "5"
+numberOfGenes = "1"
 
 motherDNA = gen.BuildSequenceFromGenes(numberOfGenes)
 fatherDNA = gen.BuildSequenceFromGenes(numberOfGenes)
