@@ -21,8 +21,10 @@ def PrintFeatures(dnaSequence):
 
 
 
-def RandomMutation(motherDNA, fatherDNA):
+def RandomMutation(motherDNA, fatherDNA, test = False, countList=None):
 
+    if countList is None:
+        countList = [0, 0]
     childDNA = ""
 
     for i in range(0,len(motherDNA)):
@@ -32,20 +34,27 @@ def RandomMutation(motherDNA, fatherDNA):
         randomValue = random.randint(1,100)
         if randomValue <= 50:
             childBase = motherBase
+            countList[0] += 1
         else:
             childBase = fatherBase
+            countList[1] += 1
 
         if (randomValue == 1) or (randomValue == 100):
             childBase = gen.bases[random.randint(0,3)]
 
         childDNA = childDNA + childBase
 
-    return childDNA
+    if test:
+        return childDNA, countList
+    else:
+        return childDNA
 
 
 
-def SignalSwitching(motherDNA, fatherDNA):
+def SignalSwitching(motherDNA, fatherDNA, test = False, countList=None):
 
+    if countList is None:
+        countList = [0, 0]
     numberOfEncodedBases = gen.getNumberOfEncodedBases()
     childDNA = ""
     baseCount = 0
@@ -61,9 +70,11 @@ def SignalSwitching(motherDNA, fatherDNA):
         if randomValue <= 50:
             childGene = motherDNA[baseCount :
                         baseCount + geneLength + numberOfEncodedBases]
+            countList[0] += 1
         else:
             childGene = fatherDNA[baseCount :
                         baseCount + geneLength + numberOfEncodedBases]
+            countList[1] += 1
 
         if (randomValue == 1) or (randomValue == 100):
             randomBase = random.randint(0, geneLength)
@@ -73,9 +84,13 @@ def SignalSwitching(motherDNA, fatherDNA):
                        childDNA[baseLocation + 1 : len(childDNA)]
 
         childDNA = childDNA + childGene
+
         baseCount += geneLength + numberOfEncodedBases
 
-    return childDNA
+    if test:
+        return childDNA, countList
+    else:
+        return childDNA
 
 
 
@@ -108,6 +123,3 @@ def runDNASimulator(numberOfGenes):
 
 #Either "all" or numeric value
 #runDNASimulator("1")
-
-
-
