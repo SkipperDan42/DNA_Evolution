@@ -1,20 +1,40 @@
 import random
 import dna_dictionaries as dna
+import gene_dictionaries as gene
 
+
+
+#DEPRICATED - Pure Random Sequence with no Gene Markers
 def BuildRandomSequence():
     dnaSequence = ""
-
     for i in range(12):
         dnaSequence = dnaSequence + bases[random.randint(0,3)]
-
     return dnaSequence
 
 
-def BuildSequenceFromGenes():
+def BuildSequenceFromGenes(numberOfGenes):
     dnaSequence = ""
+    global genesUsed
+    global genesChosen
 
-    for geneGroup in allGenes:
-        geneGroupLength = getBasePairCounts(allGenes[geneGroup])
+    if numberOfGenes == "all":
+        genesUsed = gene.allGenes
+    elif numberOfGenes.strip().isdigit():
+        if int(numberOfGenes) > len(gene.allGenes):
+            if not genesChosen:
+                genesChosen = True
+                for randomNumber in range(random.randint(1, len(gene.allGenes))):
+                    randomGene = random.choice(list(gene.allGenes.keys()))
+                    genesUsed.update({randomGene: gene.allGenes[randomGene]})
+        else:
+
+            for number in range(int(numberOfGenes) + 1):
+                randomGene = random.choice(list(gene.allGenes.keys()))
+                genesUsed.update({randomGene: gene.allGenes[randomGene]})
+
+
+    for geneGroup in genesUsed:
+        geneGroupLength = getBasePairCounts(genesUsed[geneGroup])
         encoding = geneGroupLength
 
         for encodedBasePairs in range(getNumberOfEncodedBases()):
@@ -29,18 +49,18 @@ def BuildSequenceFromGenes():
 
     return dnaSequence
 
-def getLongestGene():
-    totalBasePairs = 0
 
-    for genes in allGenes:
-        newGeneLength = getBasePairCounts(allGenes[genes])
-        if newGeneLength > totalBasePairs:
-            totalBasePairs = newGeneLength
 
-    return totalBasePairs
+def getRandomGenes(range):
+    randomGenes = {}
+    for number in range(range):
+        geneLabel = random.choice(list(gene.allGenes.keys()))
+        randomGenes.update({geneLabel: gene.allGenes[geneLabel]})
 
-def getNumberOfEncodedBases():
-    return (getLongestGene() // (len(bases) - 1)) + 1
+    return randomGenes
+
+
+
 
 def getBasePairCounts(currentGenes):
     totalBasePairs = 0
@@ -56,23 +76,28 @@ def getBasePairCounts(currentGenes):
 
     return totalBasePairs
 
+
+
+def getNumberOfEncodedBases():
+    return (getLongestGene() // (len(bases) - 1)) + 1
+
+
+
+def getLongestGene():
+    totalBasePairs = 0
+
+    for genes in genesUsed:
+        newGeneLength = getBasePairCounts(genesUsed[genes])
+        if newGeneLength > totalBasePairs:
+            totalBasePairs = newGeneLength
+
+    return totalBasePairs
+
+
+
 bases = ["A","C","G","T"]
-
-hairGenes = {"Hair Texture": dna.hair_textures,
-             "Hair Type":    dna.hair_types,
-             "Hair Colour":  dna.hair_colours}
-
-eyeGenes = {"Eye Tone":      dna.eye_tones,
-            "Eye Primary Colour":   dna.eye_primary_colours,
-            "Eye Secondary Colour": dna.eye_secondary_colours}
-
-skinGenes = {"Skin Type":   dna.skin_types,
-             "Skin Tone":   dna.skin_tones,
-             "Skin Colour": dna.skin_colours}
-
-allGenes = {"Hair": hairGenes,
-            "Eyes":  eyeGenes,
-            "Skin": skinGenes}
+genesUsed = {}
+genesChosen = False
 
 #print(BuildSequenceFromGenes())
 #for genes in allGenes:

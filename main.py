@@ -8,8 +8,8 @@ def PrintFeatures(dnaSequence):
     encoder = gen.getNumberOfEncodedBases() - 1
     read = 0
 
-    for geneGroupLabel in gen.allGenes:
-        geneGroup = gen.allGenes[geneGroupLabel]
+    for geneGroupLabel in gen.genesUsed:
+        geneGroup = gen.genesUsed[geneGroupLabel]
         read += encoder
 
         for i, gene in enumerate(geneGroup):
@@ -52,7 +52,7 @@ def SignalSwitching(motherDNA, fatherDNA):
     childDNA = ""
     baseCount = 0
 
-    for geneGroups in range(len(gen.allGenes)):
+    for geneGroups in range(len(gen.genesUsed)):
 
         geneLength = 0
 
@@ -70,8 +70,11 @@ def SignalSwitching(motherDNA, fatherDNA):
 
     return childDNA
 
-motherDNA = gen.BuildSequenceFromGenes()
-fatherDNA = gen.BuildSequenceFromGenes()
+#Either "all" or numeric value
+numberOfGenes = "5"
+
+motherDNA = gen.BuildSequenceFromGenes(numberOfGenes)
+fatherDNA = gen.BuildSequenceFromGenes(numberOfGenes)
 
 childDNASignal = SignalSwitching(motherDNA, fatherDNA)
 childDNAMutation = RandomMutation(motherDNA, fatherDNA)
