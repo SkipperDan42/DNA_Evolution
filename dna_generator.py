@@ -33,25 +33,25 @@ def BuildSequenceFromGenes(numberOfGenes):
         geneGroupLength = getBasePairCounts(genesUsed[geneGroup])
         encoding = geneGroupLength
 
-        for encodedBasePairs in range(getNumberOfEncodedBases()):
+        """
+        Codes which Chromosome the Gene will be read from.
+        """
+        randomValue = random.randint(0, 3)
+        if randomValue == 0:
+            dnaSequence = dnaSequence + "A"
+        elif randomValue == 1:
+            dnaSequence = dnaSequence + "C"
+        elif randomValue == 2:
+            dnaSequence = dnaSequence + "G"
+        else:
+            dnaSequence = dnaSequence + "T"
 
-            """
-            Codes which Chromosome the Gene will be read from.
-            """
-            randomValue = random.randint(0, 3)
-            if randomValue == 0:
-                dnaSequence = dnaSequence + "A"
-            elif randomValue == 1:
-                dnaSequence = dnaSequence + "C"
-            elif randomValue == 2:
-                dnaSequence = dnaSequence + "G"
-            else:
-                dnaSequence = dnaSequence + "T"
+        """
+        Codes the value of the gene length using by adding together the
+        index values of the encoded base pairs.
+        """
+        for encodedBasePairs in range(getNumberOfEncodedBases() - 1):
 
-            """
-            Codes the value of the gene length using by adding together the
-            index values of the encoded base pairs.
-            """
             for i in range(len(bases)-1,-1,-1):
                 if i <= encoding:
                     dnaSequence = dnaSequence + bases[i]
