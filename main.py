@@ -4,7 +4,26 @@ import dna_generator as gen
 
 
 def PrintDNASequence(dna):
-    None
+    encoder = gen.getNumberOfEncodedBases()
+    basesRead = 0
+
+    for geneGroupLabel in gen.genesUsed:
+        geneGroup = gen.genesUsed[geneGroupLabel]
+
+
+        print(dna[basesRead],end=" - ")
+        print(dna[basesRead + 1 : basesRead + encoder], end=" - ")
+
+        basesRead += encoder
+
+        for i, gene in enumerate(geneGroup):
+            basesToRead = len(list(geneGroup[gene].keys())[0])
+            dnaLen = len(dna)
+            if (basesRead + basesToRead) == len(dna):
+                print(dna[basesRead: basesRead + basesToRead], end="\n")
+            else:
+                print(dna[basesRead : basesRead + basesToRead], end=" - ")
+            basesRead += basesToRead
 
 
 
@@ -27,7 +46,7 @@ def PrintFeatures(chromosomeA, chromosomeB):
             print(gene + ": " +
                   geneGroup[gene][chromosomeToRead[basesRead : basesRead + basesToRead]])
 
-            basesRead = basesToRead
+            basesRead += basesToRead
 
 
 
@@ -177,26 +196,38 @@ def runDNASimulator(numberOfGenes):
                                                            motherChromosomeB,
                                                            fatherChromosomeA,
                                                            fatherChromosomeB)
-
+    """
     print("Mother Chromosome A    :" + motherChromosomeA)
     print("Mother Chromosome B    :" + motherChromosomeB)
     print("Father Chromosome A    :" + fatherChromosomeA)
     print("Father Chromosome B    :" + fatherChromosomeB)
+    """
 
-    print("Child Chromosome A [SS]:" + childChASignal)
-    print("Child Chromosome B [SS]:" + childChBSignal)
-    print("Child Chromosome A [M] :" + childChAMutation)
-    print("Child Chromosome B [M] :" + childChBMutation)
+    print("Mother Chromosome A    :", end = "")
+    PrintDNASequence(motherChromosomeA)
+    print("Mother Chromosome B    :", end = "")
+    PrintDNASequence(motherChromosomeB)
+    print("Father Chromosome A    :", end = "")
+    PrintDNASequence(fatherChromosomeA)
+    print("Father Chromosome B    :", end = "")
+    PrintDNASequence(fatherChromosomeB)
+
+    print("Child Chromosome A [SS]:", end = "")
+    PrintDNASequence(childChASignal)
+    print("Child Chromosome B [SS]:", end = "")
+    PrintDNASequence(childChBSignal)
+    print("Child Chromosome A [M] :", end = "")
+    PrintDNASequence(childChAMutation)
+    print("Child Chromosome B [M] :", end = "")
+    PrintDNASequence(childChBMutation)
+
 
     print("\nMother:")
     PrintFeatures(motherChromosomeA, motherChromosomeB)
-
     print("\nFather:")
     PrintFeatures(fatherChromosomeA, fatherChromosomeB)
-
     print("\nChild [Signal Switching]:")
     PrintFeatures(childChASignal, childChBSignal)
-
     print("\nChild [Random Mutation]:")
     PrintFeatures(childChAMutation, childChBMutation)
 
