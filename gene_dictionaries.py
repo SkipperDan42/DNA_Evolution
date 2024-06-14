@@ -66,11 +66,11 @@ skinPatternGenes = {"Freckle Pattern":      dna.freckle_patterns,
                     "Mole Pattern":         dna.mole_patterns,
                     "Birthmark Pattern":    dna.birthmark_patterns}
 
-voiceGene = {"Voice": dna.voice_tones}
+voiceGenes = {"Voice": dna.voice_tones}
 
 
 
-allGenes = {
+allGeneClusters = {
             "Skin": skinGenes,
             "Body": bodyGenes,
             "Hair": hairGenes,
@@ -86,4 +86,4 @@ allGenes = {
             "Legs": legGenes,
             "Feet": footGenes,
             "Skin Patterns": skinPatternGenes,
-            "Voice": voiceGene}
+            "Voice": voiceGenes}

@@ -3,6 +3,11 @@ import dna_generator as gen
 
 
 
+def PrintDNASequence(dna):
+    None
+
+
+
 def PrintFeatures(chromosomeA, chromosomeB):
 
     encoder = gen.getNumberOfEncodedBases()
@@ -108,10 +113,8 @@ def SignalSwitching(motherDNA, fatherDNA):
 
 def runDNASimulator(numberOfGenes):
 
-    motherChromosomeA = gen.BuildSequenceFromGenes(numberOfGenes)
-    motherChromosomeB = gen.BuildSequenceFromGenes(numberOfGenes)
-    fatherChromosomeA = gen.BuildSequenceFromGenes(numberOfGenes)
-    fatherChromosomeB = gen.BuildSequenceFromGenes(numberOfGenes)
+    motherChromosomeA, motherChromosomeB = gen.BuildSequenceFromGenes(numberOfGenes)
+    fatherChromosomeA, fatherChromosomeB = gen.BuildSequenceFromGenes(numberOfGenes)
     """
     childChASignal, childChBSignal = SignalSwitching(motherChromosomeA,
                                                      motherChromosomeB,

@@ -4,29 +4,39 @@ import gene_dictionaries as gene
 
 
 
-#DEPRICATED - Pure Random Sequence with no Gene Markers
-def BuildRandomSequence():
+"""
+DEPRICATED - Pure Random Sequence with no Gene Markers
+"""
+def BuildRandomSequence(numberOfBases):
     dnaSequence = ""
-    for i in range(12):
+    for i in range(numberOfBases):
         dnaSequence = dnaSequence + bases[random.randint(0,3)]
     return dnaSequence
 
 
-def BuildSequenceFromGenes(numberOfGenes):
-    dnaSequence = ""
+"""
+Builds a DNA sequence including the desired number of Gene Clusters.
+These gene clusters may be of different lengths and each contain different 
+numbers of genes.
+"""
+def BuildSequenceFromGenes(numberOfGeneClusters):
+
+    chromosomeA = ""
+    chromosomeB = ""
+
     global genesUsed
     global genesChosen
 
     if not genesChosen:
         genesChosen = True
-        if numberOfGenes == "all":
-            genesUsed = gene.allGenes
-        elif numberOfGenes.strip().isdigit():
-            numberOfGenes = int(numberOfGenes)
-            if numberOfGenes > len(gene.allGenes):
-                genesUsed = getRandomGenes(random.randint(1, len(gene.allGenes)))
+        if numberOfGeneClusters == "all":
+            genesUsed = gene.allGeneClusters
+        elif numberOfGeneClusters.strip().isdigit():
+            numberOfGeneClusters = int(numberOfGeneClusters)
+            if numberOfGeneClusters > len(gene.allGeneClusters):
+                genesUsed = getRandomGenes(random.randint(1, len(gene.allGeneClusters)))
             else:
-                genesUsed = getRandomGenes(numberOfGenes)
+                genesUsed = getRandomGenes(numberOfGeneClusters)
 
 
     for geneGroup in genesUsed:
@@ -38,13 +48,17 @@ def BuildSequenceFromGenes(numberOfGenes):
         """
         randomValue = random.randint(0, 3)
         if randomValue == 0:
-            dnaSequence = dnaSequence + "A"
+            chromosomeA = chromosomeA + "A"
+            chromosomeB = chromosomeB + "A"
         elif randomValue == 1:
-            dnaSequence = dnaSequence + "C"
+            chromosomeA = chromosomeA + "C"
+            chromosomeB = chromosomeB + "C"
         elif randomValue == 2:
-            dnaSequence = dnaSequence + "G"
+            chromosomeA = chromosomeA + "G"
+            chromosomeB = chromosomeB + "G"
         else:
-            dnaSequence = dnaSequence + "T"
+            chromosomeA = chromosomeA + "T"
+            chromosomeB = chromosomeB + "T"
 
         """
         Codes the value of the gene length using by adding together the
@@ -54,22 +68,24 @@ def BuildSequenceFromGenes(numberOfGenes):
 
             for i in range(len(bases)-1,-1,-1):
                 if i <= encoding:
-                    dnaSequence = dnaSequence + bases[i]
+                    chromosomeA = chromosomeA + bases[i]
+                    chromosomeB = chromosomeB + bases[i]
                     encoding = encoding - i
                     break
 
         for geneBasePairs in range(geneGroupLength):
-           dnaSequence = dnaSequence + bases[random.randint(0, 3)]
+           chromosomeA = chromosomeA + bases[random.randint(0, 3)]
+           chromosomeB = chromosomeB + bases[random.randint(0, 3)]
 
-    return dnaSequence
+    return chromosomeA, chromosomeB
 
 
 
 def getRandomGenes(numberOfGenes):
     randomGenes = {}
     for number in range(numberOfGenes):
-        geneLabel = random.choice(list(gene.allGenes.keys()))
-        randomGenes.update({geneLabel: gene.allGenes[geneLabel]})
+        geneLabel = random.choice(list(gene.allGeneClusters.keys()))
+        randomGenes.update({geneLabel: gene.allGeneClusters[geneLabel]})
 
     return randomGenes
 
