@@ -122,4 +122,4 @@ def runDNASimulator(numberOfGenes):
 
 
 #Either "all" or numeric value
-#runDNASimulator("1")
+runDNASimulator("all")
