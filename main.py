@@ -126,6 +126,8 @@ def runDNASimulator(numberOfGenes):
     print("Father Chromosome B    :" + fatherChromosomeB)
     """
 
+    prt.PrintColourLabels()
+
     print("Mother Chromosome A    :", end = "")
     prt.PrintDNASequence(motherChromosomeA, True)
     print("Mother Chromosome B    :", end = "")
@@ -159,7 +161,7 @@ def runDNASimulator(numberOfGenes):
 
 
 #Either "all" or numeric value
-runDNASimulator("4")
+runDNASimulator("all")
 
 
 

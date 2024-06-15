@@ -21,6 +21,18 @@
 import dna_generator as gen
 import functions as fun
 
+
+
+def PrintColourLabels():
+    print("\033[0;33;255m" + "Chromosome Encoding" + "\033[0m", end=" | ")
+    print("\033[0;32;255m" + "Gene Length Encoding" + "\033[0m", end="\n")
+    print("\033[0;30;255m" + "From Neither" + "\033[0m", end=" | ")
+    print("\033[0;31;255m" + "From Mother" + "\033[0m", end=" | ")
+    print("\033[0;34;255m" + "From Father" + "\033[0m", end=" | ")
+    print("\033[0;35;255m" + "From Both" + "\033[0m", end="\n")
+
+
+
 def PrintDNASequence(dna, withColour=False, parentDNA = []):
     encoder = gen.getNumberOfEncodedBases()
     basesRead = 0
