@@ -1,5 +1,5 @@
-import random
 import functions as fun
+import printers as prt
 import dna_generator as gen
 
 
@@ -17,32 +17,18 @@ def RandomDNAMutation(motherChromosomeA, motherChromosomeB,
         fatherBaseB = fatherChromosomeB[i]
 
         # Mother Sex Chromosome
-        motherBaseS = RandomBase(motherBaseA, motherBaseB)
+        motherBaseS = fun.RandomBase(motherBaseA, motherBaseB)
         # Father Sex Chromosome
-        fatherBaseS = RandomBase(fatherBaseA, fatherBaseB)
+        fatherBaseS = fun.RandomBase(fatherBaseA, fatherBaseB)
         # Child Chromosome A
-        childBaseA = RandomBase(motherBaseS, fatherBaseS)
+        childBaseA = fun.RandomBase(motherBaseS, fatherBaseS)
         # Child Chromosome B
-        childBaseB = RandomBase(motherBaseS, fatherBaseS)
+        childBaseB = fun.RandomBase(motherBaseS, fatherBaseS)
 
         childChromosomeA = childChromosomeA + childBaseA
         childChromosomeB = childChromosomeB + childBaseB
 
     return childChromosomeA, childChromosomeB
-
-
-
-def RandomBase(baseA, baseB):
-
-    randomValue = random.randint(1, 100)
-    if (randomValue == 1) or (randomValue == 100):
-        baseR = gen.bases[random.randint(0, 3)]
-    elif randomValue <= 50:
-        baseR = baseA
-    else:
-        baseR = baseB
-
-    return baseR
 
 
 
@@ -76,19 +62,19 @@ def SignalSwitching(motherChromosomeA, motherChromosomeB,
             geneLength += gen.bases.index(motherChromosomeA[basesRead + base])
 
         #Mother Gene on Sex Chromosome
-        motherGeneS = RandomGene(motherChromosomeA[basesRead : basesRead
+        motherGeneS = fun.RandomGene(motherChromosomeA[basesRead : basesRead
                                     + numberOfEncodedBases + geneLength],
                                  motherChromosomeA[basesRead: basesRead
                                     + numberOfEncodedBases + geneLength])
         # Father Sex Gene on Sex Chromosome
-        fatherGeneS = RandomGene(fatherChromosomeA[basesRead: basesRead
+        fatherGeneS = fun.RandomGene(fatherChromosomeA[basesRead: basesRead
                                     + numberOfEncodedBases + geneLength],
                                  fatherChromosomeA[basesRead: basesRead
                                     + numberOfEncodedBases + geneLength])
         # Child Gene on Chromosome A
-        childGeneA = RandomGene(motherGeneS,fatherGeneS)
+        childGeneA = fun.RandomGene(motherGeneS,fatherGeneS)
         # Child Gene on Chromosome B
-        childGeneB = RandomGene(motherGeneS,fatherGeneS)
+        childGeneB = fun.RandomGene(motherGeneS,fatherGeneS)
 
         childChromosomeA = childChromosomeA + childGeneA
         childChromosomeB = childChromosomeB + childGeneB
@@ -96,29 +82,6 @@ def SignalSwitching(motherChromosomeA, motherChromosomeB,
         basesRead += geneLength + numberOfEncodedBases
 
     return childChromosomeA, childChromosomeB
-
-
-
-def RandomGene(geneA, geneB):
-
-    geneR = ""
-    randomValue = random.randint(1, 100)
-    if randomValue <= 50:
-        geneR = geneA
-    else:
-        geneR = geneB
-
-    """
-    Transcription errors must take place after the gene has been selected.
-    """
-    if (randomValue == 1) or (randomValue == 100):
-        randomBase = random.randint(0, len(geneR))
-        baseLocation = randomBase
-        geneR = geneR[0: baseLocation] + \
-                gen.bases[random.randint(0, 3)] + \
-                geneR[baseLocation + 1: len(geneR)]
-
-    return geneR
 
 
 
@@ -144,34 +107,34 @@ def runDNASimulator(numberOfGenes):
     """
 
     print("Mother Chromosome A    :", end = "")
-    fun.PrintDNASequence(motherChromosomeA, True)
+    prt.PrintDNASequence(motherChromosomeA, True)
     print("Mother Chromosome B    :", end = "")
-    fun.PrintDNASequence(motherChromosomeB, True)
+    prt.PrintDNASequence(motherChromosomeB, True)
     print("Father Chromosome A    :", end = "")
-    fun.PrintDNASequence(fatherChromosomeA, True)
+    prt.PrintDNASequence(fatherChromosomeA, True)
     print("Father Chromosome B    :", end = "")
-    fun.PrintDNASequence(fatherChromosomeB, True)
+    prt.PrintDNASequence(fatherChromosomeB, True)
 
     parentChromosomes = [motherChromosomeA, motherChromosomeB,
                          fatherChromosomeA, fatherChromosomeB]
     print("Child Chromosome A [SS]:", end = "")
-    fun.PrintDNASequence(childChASignal, True, parentChromosomes)
+    prt.PrintDNASequence(childChASignal, True, parentChromosomes)
     print("Child Chromosome B [SS]:", end = "")
-    fun.PrintDNASequence(childChBSignal, True, parentChromosomes)
+    prt.PrintDNASequence(childChBSignal, True, parentChromosomes)
     print("Child Chromosome A [M] :", end = "")
-    fun.PrintDNASequence(childChAMutation, True, parentChromosomes)
+    prt.PrintDNASequence(childChAMutation, True, parentChromosomes)
     print("Child Chromosome B [M] :", end = "")
-    fun.PrintDNASequence(childChBMutation, True, parentChromosomes)
+    prt.PrintDNASequence(childChBMutation, True, parentChromosomes)
 
 
     print("\nMother:")
-    fun.PrintFeatures(motherChromosomeA, motherChromosomeB)
+    prt.PrintFeatures(motherChromosomeA, motherChromosomeB)
     print("\nFather:")
-    fun.PrintFeatures(fatherChromosomeA, fatherChromosomeB)
+    prt.PrintFeatures(fatherChromosomeA, fatherChromosomeB)
     print("\nChild [Signal Switching]:")
-    fun.PrintFeatures(childChASignal, childChBSignal)
+    prt.PrintFeatures(childChASignal, childChBSignal)
     print("\nChild [Random Mutation]:")
-    fun.PrintFeatures(childChAMutation, childChBMutation)
+    prt.PrintFeatures(childChAMutation, childChBMutation)
 
 
 
