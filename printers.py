@@ -109,25 +109,43 @@ def PrintDNASequence(dna, withColour=False, parentDNA = []):
 
 
 
+"""
+This will print out the expressions of Physical Features defined by the
+genes in a pair Chromosomes.
+"""
 def PrintFeatures(chromosomeA, chromosomeB):
 
+    # Defines the length of the encoding for all genes using the
+    # longest gene present.
     encoder = gen.getNumberOfEncodedBases()
+
+    # Define the number of bases that have been read (the counter)
     basesRead = 0
 
-    for geneGroupLabel in gen.genesUsed:
-        geneGroup = gen.genesUsed[geneGroupLabel]
+    # Loop through all gene clusters (collection of genes) to be used
+    for geneClusterLabel in gen.genesUsed:
+        geneCluster = gen.genesUsed[geneClusterLabel]
 
-        #Choose which Chromosome to read
+        # Using the encoding decide which Chromosome should be read
         chromosomeToRead = fun.checkChromosomeToRead(chromosomeA, chromosomeB,
-                                                        basesRead)
+                                                    basesRead)
 
+        # After the encoding has been read increase the value of bases read
         basesRead += encoder
 
-        for i, gene in enumerate(geneGroup):
-            basesToRead = len(list(geneGroup[gene].keys())[0])
-            print(gene + ": " +
-                  geneGroup[gene][chromosomeToRead[basesRead : basesRead + basesToRead]])
+        # Loop through all genes within the geneCluster
+        for gene in geneCluster:
 
+            # Check how many bases long the current gene is
+            basesToRead = len(list(geneCluster[gene].keys())[0])
+
+            # Print the name of the gene (physical feature), followed by
+            # the expression of the physical feature itself
+            print(gene + ": " +
+                  geneCluster[gene][chromosomeToRead[basesRead :
+                                                     basesRead + basesToRead]])
+
+            # Update the value of bases read at the end of the loop
             basesRead += basesToRead
 
 
