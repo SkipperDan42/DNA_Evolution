@@ -19,7 +19,7 @@
 
 
 import dna_generator as gen
-import functions as fun
+import dna_functions as fun
 
 
 
