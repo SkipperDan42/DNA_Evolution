@@ -19,7 +19,6 @@
 
 
 import random
-import dna_dictionaries as dna
 import gene_dictionaries as gene
 
 

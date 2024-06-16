@@ -17,6 +17,7 @@
 # <http://www.gnu.org/licenses/>.
 
 
+
 import dna_functions as fun
 import printers as prt
 import dna_generator as gen
@@ -99,6 +100,8 @@ def SignalSwitching(motherChromosomeA, motherChromosomeB,
     basesRead = 0
 
     #Loop through all gene clusters (collection of genes) to be used
+    #  - note geneCluster is not used but ensures the correct number
+    #    of loops.
     for geneCluster in range(len(gen.genesUsed)):
 
         #Resets and retrieves the value of the gene length by getting the
@@ -106,6 +109,8 @@ def SignalSwitching(motherChromosomeA, motherChromosomeB,
         geneLength = 0
         for base in range(1,numberOfEncodedBases):
             geneLength += gen.bases.index(motherChromosomeA[basesRead + base])
+
+        #TODO: ALLOW EACH GENE WITHIN A GENE CLUSTER TO BE RANDOMLY SELECTED FROM EACH CHROMOSOME
 
         """
         The Sex Chromosomes of each parent are assumed to be a mix of the 
@@ -124,10 +129,8 @@ def SignalSwitching(motherChromosomeA, motherChromosomeB,
                                  fatherChromosomeB[basesRead: basesRead
                                     + numberOfEncodedBases + geneLength])
 
-        """
-        MUST ADD WAY TO ENSURE GENE ENCODING ON 
-        CHILD IS THE SAME FOR BOTH CHROMOSOMES
-        """
+        #TODO: MUST ADD WAY TO ENSURE GENE ENCODING ON CHILD IS THE SAME FOR BOTH CHROMOSOMES
+
         # Randomly generate this gene cluster for each of the Child
         # Chromosomes from the Sex Chromosomes of each parent.
         childGeneA = fun.RandomGene(motherGeneS,fatherGeneS)
