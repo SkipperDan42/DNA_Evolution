@@ -32,6 +32,7 @@ COLOR_MOTHER = "\033[95m"  # Magenta
 COLOR_FATHER = "\033[94m"  # Blue
 COLOR_BOTH = "\033[92m"    # Green
 COLOR_NEITHER = "\033[91m" # Red
+COLOR_TF = "\033[93m"      # Yellow for transcription factors
 COLOR_RESET = "\033[0m"    # Reset
 
 def find_genes(dna_strand, genes, transcription_factors, mother_strand=None, father_strand=None):
@@ -48,19 +49,29 @@ def find_genes(dna_strand, genes, transcription_factors, mother_strand=None, fat
     found_features = []
     color_coded_dna = []
 
-    for i in range(len(dna_strand)):
-        base = dna_strand[i]
-        if mother_strand and father_strand:
-            if base == mother_strand[i] and base == father_strand[i]:
-                color_coded_dna.append(COLOR_BOTH + base + COLOR_RESET)
-            elif base == mother_strand[i]:
-                color_coded_dna.append(COLOR_MOTHER + base + COLOR_RESET)
-            elif base == father_strand[i]:
-                color_coded_dna.append(COLOR_FATHER + base + COLOR_RESET)
+    i = 0
+    while i < len(dna_strand):
+        matched = False
+        for tf in transcription_factors.keys():
+            if dna_strand[i:i+len(tf)] == tf:
+                color_coded_dna.append(COLOR_TF + tf + COLOR_RESET)
+                i += len(tf)
+                matched = True
+                break
+        if not matched:
+            base = dna_strand[i]
+            if mother_strand and father_strand:
+                if base == mother_strand[i] and base == father_strand[i]:
+                    color_coded_dna.append(COLOR_BOTH + base + COLOR_RESET)
+                elif base == mother_strand[i]:
+                    color_coded_dna.append(COLOR_MOTHER + base + COLOR_RESET)
+                elif base == father_strand[i]:
+                    color_coded_dna.append(COLOR_FATHER + base + COLOR_RESET)
+                else:
+                    color_coded_dna.append(COLOR_NEITHER + base + COLOR_RESET)
             else:
-                color_coded_dna.append(COLOR_NEITHER + base + COLOR_RESET)
-        else:
-            color_coded_dna.append(base)
+                color_coded_dna.append(base)
+            i += 1
 
     for gene, feature in genes.items():
         if gene in dna_strand and active_genes[gene]:
@@ -130,6 +141,11 @@ def create_random_zygote(parent1, parent2):
         zygote.append(random.choice([base1, base2]))
     return ''.join(zygote)
 
+def split_zygote(zygote):
+    """Split a zygote back into two gametes."""
+    midpoint = len(zygote) // 2
+    return zygote[:midpoint], zygote[midpoint:]
+
 # Simulate meiosis for two parents
 gamete1_parent1 = simulate_meiosis_for_parent()
 gamete2_parent1 = simulate_meiosis_for_parent()
@@ -145,6 +161,10 @@ parent1_combined = ''.join([gamete1_parent1, gamete2_parent1])
 parent2_combined = ''.join([gamete1_parent2, gamete2_parent2])
 zygote_random = create_random_zygote(parent1_combined, parent2_combined)
 
+# Split the zygotes back into gametes
+split_gamete1_meiosis, split_gamete2_meiosis = split_zygote(zygote_meiosis)
+split_gamete1_random, split_gamete2_random = split_zygote(zygote_random)
+
 # Find features in the zygotes
 features_zygote_meiosis, colored_dna_meiosis = find_genes(zygote_meiosis, genes, transcription_factors, mother_strand=parent1_combined, father_strand=parent2_combined)
 features_zygote_random, colored_dna_random = find_genes(zygote_random, genes, transcription_factors, mother_strand=parent1_combined, father_strand=parent2_combined)
@@ -156,12 +176,16 @@ print("Parent 2 Gamete 2:", gamete2_parent2)
 
 print("\nZygote (Meiosis):")
 print(colored_dna_meiosis)
+print("Split Gamete 1 (Meiosis):", split_gamete1_meiosis)
+print("Split Gamete 2 (Meiosis):", split_gamete2_meiosis)
 print("Features in Zygote (Meiosis):")
 for feature in features_zygote_meiosis:
     print(feature)
 
 print("\nZygote (Random Selection):")
 print(colored_dna_random)
+print("Split Gamete 1 (Random Selection):", split_gamete1_random)
+print("Split Gamete 2 (Random Selection):", split_gamete2_random)
 print("Features in Zygote (Random Selection):")
 for feature in features_zygote_random:
     print(feature)
