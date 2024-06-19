@@ -5,26 +5,57 @@ def generate_dna_strand(length):
     bases = ['A', 'T', 'C', 'G']
     return ''.join(random.choice(bases) for _ in range(length))
 
-# Dictionary of genes and corresponding physical features
-genes = {
-    'AAAT': 'Blue eyes',
-    'CGCG': 'Brown hair',
-    'TTAT': 'Tall height',
-    'GGCC': 'Freckles',
-    'ATGC': 'Green eyes',
-    'TATA': 'Curly hair',
-    'GAGA': 'Dimples'
+# Extended dictionary of genes and corresponding physical features organized in clusters
+gene_clusters = {
+    'eye_color': {
+        'AAATG': 'Blue eyes',
+        'ATGCG': 'Green eyes',
+        'CGCGT': 'Brown eyes'
+    },
+    'hair_type': {
+        'TATAG': 'Curly hair',
+        'CCGGA': 'Straight hair'
+    },
+    'hair_color': {
+        'CCTTA': 'Red hair',
+        'GGGAT': 'Black hair',
+        'TCAAG': 'Blonde hair'
+    },
+    'height': {
+        'TTATT': 'Tall height',
+        'TTGGA': 'Short height'
+    },
+    'facial_structure': {
+        'GTTAC': 'Round face',
+        'AAGCT': 'Oval face',
+        'ACGTA': 'Square face'
+    },
+    'nose_shape': {
+        'AGGCT': 'Wide nose',
+        'TCCGT': 'Narrow nose'
+    },
+    'chin_shape': {
+        'CTGGA': 'Pointed chin',
+        'GAGAT': 'Rounded chin'
+    },
+    'forehead_shape': {
+        'TGGAT': 'High forehead',
+        'GTTAG': 'Low forehead'
+    }
 }
 
-# Dictionary of transcription factors and their effects on genes
+# Extended dictionary of transcription factors and their effects on genes
 transcription_factors = {
-    'ACTG': {'AAAT': True},  # ACTG activates Blue eyes
-    'TGCA': {'CGCG': False}, # TGCA deactivates Brown hair
-    'GACT': {'TTAT': True},  # GACT activates Tall height
-    'CTGA': {'GGCC': False}, # CTGA deactivates Freckles
-    'CAGT': {'ATGC': True},  # CAGT activates Green eyes
-    'GTAC': {'TATA': False}, # GTAC deactivates Curly hair
-    'AGCT': {'GAGA': True}   # AGCT activates Dimples
+    'ACTGA': {'AAATG': True, 'ATGCG': False, 'CGCGT': False},  # ACTGA activates Blue eyes and deactivates others
+    'TGCAT': {'CGCGT': True, 'AAATG': False, 'ATGCG': False},  # TGCAT activates Brown eyes and deactivates others
+    'CAGTT': {'ATGCG': True, 'AAATG': False, 'CGCGT': False},  # CAGTT activates Green eyes and deactivates others
+    'GTACA': {'TATAG': True, 'CCGGA': False},  # GTACA activates Curly hair and deactivates Straight hair
+    'TGGCA': {'CCGGA': True, 'TATAG': False},  # TGGCA activates Straight hair and deactivates Curly hair
+    'AACGT': {'TTATT': True, 'TTGGA': False},  # AACGT activates Tall height and deactivates Short height
+    'TTGAC': {'TTGGA': True, 'TTATT': False},  # TTGAC activates Short height and deactivates Tall height
+    'AGCTA': {'GTTAC': True, 'AAGCT': False, 'ACGTA': False},  # AGCTA activates Round face and deactivates others
+    'TCAAG': {'AAGCT': True, 'GTTAC': False, 'ACGTA': False},  # TCAAG activates Oval face and deactivates others
+    'GACTT': {'ACGTA': True, 'AAGCT': False, 'GTTAC': False}   # GACTT activates Square face and deactivates others
 }
 
 # Color codes for terminal output
@@ -35,9 +66,9 @@ COLOR_NEITHER = "\033[91m" # Red
 COLOR_TF = "\033[93m"      # Yellow for transcription factors
 COLOR_RESET = "\033[0m"    # Reset
 
-def find_genes(dna_strand, genes, transcription_factors, mother_strand=None, father_strand=None):
+def find_genes(dna_strand, gene_clusters, transcription_factors, mother_strand=None, father_strand=None):
     """Find genes in a DNA strand and return the corresponding features, considering transcription factors."""
-    active_genes = {gene: False for gene in genes.keys()}
+    active_genes = {gene: False for cluster in gene_clusters.values() for gene in cluster}
 
     # Check for transcription factors
     for tf, effects in transcription_factors.items():
@@ -73,20 +104,21 @@ def find_genes(dna_strand, genes, transcription_factors, mother_strand=None, fat
                 color_coded_dna.append(base)
             i += 1
 
-    for gene, feature in genes.items():
-        if gene in dna_strand and active_genes[gene]:
-            if mother_strand and father_strand:
-                if gene in mother_strand and gene in father_strand:
-                    source = COLOR_BOTH + feature + COLOR_RESET
-                elif gene in mother_strand:
-                    source = COLOR_MOTHER + feature + COLOR_RESET
-                elif gene in father_strand:
-                    source = COLOR_FATHER + feature + COLOR_RESET
+    for cluster in gene_clusters.values():
+        for gene, feature in cluster.items():
+            if gene in dna_strand and active_genes[gene]:
+                if mother_strand and father_strand:
+                    if gene in mother_strand and gene in father_strand:
+                        source = COLOR_BOTH + feature + COLOR_RESET
+                    elif gene in mother_strand:
+                        source = COLOR_MOTHER + feature + COLOR_RESET
+                    elif gene in father_strand:
+                        source = COLOR_FATHER + feature + COLOR_RESET
+                    else:
+                        source = COLOR_NEITHER + feature + COLOR_RESET
                 else:
-                    source = COLOR_NEITHER + feature + COLOR_RESET
-            else:
-                source = feature
-            found_features.append(source)
+                    source = feature
+                found_features.append(source)
 
     return found_features, ''.join(color_coded_dna)
 
@@ -117,7 +149,7 @@ def meiosis(strand1, strand2):
 def simulate_meiosis_for_parent():
     """Simulate meiosis for a parent to produce gametes."""
     # Set the length of each DNA strand
-    strand_length = 50  # Adjust as needed
+    strand_length = 100  # Adjust as needed for more genes
 
     # Generate 23 pairs of DNA strands (chromosomes)
     chromosomes_1 = [generate_dna_strand(strand_length) for _ in range(23)]
@@ -166,8 +198,8 @@ split_gamete1_meiosis, split_gamete2_meiosis = split_zygote(zygote_meiosis)
 split_gamete1_random, split_gamete2_random = split_zygote(zygote_random)
 
 # Find features in the zygotes
-features_zygote_meiosis, colored_dna_meiosis = find_genes(zygote_meiosis, genes, transcription_factors, mother_strand=parent1_combined, father_strand=parent2_combined)
-features_zygote_random, colored_dna_random = find_genes(zygote_random, genes, transcription_factors, mother_strand=parent1_combined, father_strand=parent2_combined)
+features_zygote_meiosis, colored_dna_meiosis = find_genes(zygote_meiosis, gene_clusters, transcription_factors, mother_strand=parent1_combined, father_strand=parent2_combined)
+features_zygote_random, colored_dna_random = find_genes(zygote_random, gene_clusters, transcription_factors, mother_strand=parent1_combined, father_strand=parent2_combined)
 
 print("Parent 1 Gamete 1:", gamete1_parent1)
 print("Parent 1 Gamete 2:", gamete2_parent1)
