@@ -108,6 +108,73 @@ def PrintDNASequence(dna, withColour=False, parentDNA = []):
             basesRead += basesToRead
 
 
+def tkinter_sequence_printer(dna, withColour=False, parentDNA = []):
+
+    # Defines the length of the encoding for all genes using the
+    # longest gene present.
+    encoder = gen.getNumberOfEncodedBases()
+
+    # Define the number of bases that have been read (the counter)
+    basesRead = 0
+
+    # define the end of base character
+    end = " - "
+
+    # Create the coloured string to return
+    colouredString = ""
+
+    # Loop through all gene clusters (collection of genes) to be used
+    for geneClusterLabel in gen.genesUsed:
+        geneCluster = gen.genesUsed[geneClusterLabel]
+
+        # Check whether the sequence should be printed with colours
+        if withColour:
+            colouredString += yellow + dna[basesRead] + reset + end
+            colouredString += green + dna[basesRead + 1: basesRead + encoder] + reset + end
+        else:
+            colouredString += dna[basesRead] + end
+            colouredString += dna[basesRead + 1: basesRead + encoder] + end
+
+        # After the encoding has been read increase the value of bases read
+        basesRead += encoder
+
+        # Loop through all genes within the geneCluster
+        for gene in geneCluster:
+
+            # Check how many bases long the current gene is
+            basesToRead = len(list(geneCluster[gene].keys())[0])
+            geneColour = ""
+
+            # If the user has specified to print with colour, and the
+            # list of parent chromosomes is 4 chromosomes long
+            if withColour and (len(parentDNA) == 4):
+
+                # Check if the current gene exists in either chromosome
+                # of either parent and set the colour accordingly
+                geneColour = fun.checkGeneMatchesParent(dna[basesRead: basesRead + basesToRead],
+                                                    parentDNA[0][basesRead: basesRead + basesToRead],
+                                                    parentDNA[1][basesRead: basesRead + basesToRead],
+                                                    parentDNA[2][basesRead: basesRead + basesToRead],
+                                                    parentDNA[3][basesRead: basesRead + basesToRead])
+                if geneColour == "B":
+                    geneColour = purple
+                elif geneColour == "M":
+                    geneColour = red
+                elif geneColour == "F":
+                    geneColour = blue
+                elif geneColour == "N":
+                    geneColour = black
+
+            # If the end of the dna has been reached print without seperator
+            if (basesRead + basesToRead) == len(dna):
+                colouredString += geneColour + dna[basesRead: basesRead + basesToRead] + reset
+            else:
+                colouredString += geneColour + dna[basesRead: basesRead + basesToRead] + reset + end
+
+            # Update the value of bases read at the end of the loop
+            basesRead += basesToRead
+
+    return colouredString
 
 """
 This will print out the expressions of Physical Features defined by the
